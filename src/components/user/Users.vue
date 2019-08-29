@@ -21,12 +21,12 @@
       </el-row>
       <!-- 用户列表区域 -->
       <el-table :data="userListL" border stripe>
-        <el-table-column type="index"></el-table-column>
-        <el-table-column label="姓名" prop="username"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="电话" prop="mobile"></el-table-column>
-        <el-table-column label="角色" prop="role_name"></el-table-column>
-        <el-table-column label="状态">
+        <el-table-column align="center" type="index"></el-table-column>
+        <el-table-column align="center" label="姓名" prop="username"></el-table-column>
+        <el-table-column align="center" label="邮箱" prop="email"></el-table-column>
+        <el-table-column align="center" label="电话" prop="mobile"></el-table-column>
+        <el-table-column align="center" label="角色" prop="role_name"></el-table-column>
+        <el-table-column align="center" label="状态">
           <template slot-scope="scope">
             <!-- {{scope.row}} 包含了服务器返回的这一行的所有数据 -->
             <el-switch
@@ -37,7 +37,7 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
@@ -331,9 +331,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-switch {
-  margin-left: 40%;
-}
 .el-pagination {
   margin-top: 20px;
 }

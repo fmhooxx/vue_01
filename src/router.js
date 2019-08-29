@@ -8,6 +8,8 @@ import Home from './components/Home.vue'
 import Welcome from './components/Welcome.vue'
 // 引入 users 组件
 import Users from './components/user/Users.vue'
+// 引入 权限列表组件 Rights
+import Rights from './components/power/Rights.vue'
 Vue.use(Router)
 // 解决连续点击路由导致报错的问题
 const originalPush = Router.prototype.push
@@ -25,7 +27,8 @@ let router = new Router({
       redirect: '/welcome',
       children: [
         { path: '/welcome', component: Welcome },
-        { path: '/users', component: Users }
+        { path: '/users', component: Users },
+        { path: '/rights', component: Rights }
       ]
     }
   ]

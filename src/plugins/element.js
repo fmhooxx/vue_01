@@ -23,7 +23,8 @@ import {
   Switch,
   Tooltip,
   Pagination,
-  Dialog
+  Dialog,
+  MessageBox
 } from 'element-ui'
 
 Vue.use(Button)
@@ -51,3 +52,4 @@ Vue.use(Pagination)
 Vue.use(Dialog)
 // 导入消息提示弹框组件 并且全局配置 挂载到 Vue 的原型对象上
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm

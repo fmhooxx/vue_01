@@ -6,7 +6,7 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 卡片视图去区域 -->
+    <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区 -->
       <el-row :gutter="34">
@@ -50,7 +50,12 @@
             </el-tooltip>
             <!-- 删除按钮 -->
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-delete" size="mint"></el-button>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mint"
+                @click="removeUser(scope.row.id)"
+              ></el-button>
             </el-tooltip>
             <!-- 分配角色按钮 -->
             <el-tooltip
@@ -275,7 +280,7 @@ export default {
     },
     // 监听修改用户对话框的关闭事件 实现表单的充值操作
     editDialogClosed() {
-      this.$refs.editFormRef.resetFields();
+      this.$refs.editFormRef.resetFields()
     },
     // 修改用户信息 并对表单的信息进行预验证 并提交表单
     editUserInfo() {
@@ -298,6 +303,28 @@ export default {
         // 显示提交修改成功的消息
         this.$message.success('修改用户成功')
       })
+    },
+    // 根据 id 删除用户
+    async removeUser(id) {
+      let result = await this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
+      // 如果用户确认删除 则返回值为字符串 confirm
+      // 如果用户取消了删除 则返回值为字符串 cancel
+      // console.log(result);
+      if (result !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+      let { data: res } = await this.$http.delete('users/' + id)
+      // console.log(res);
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除失败')
+      }
+      this.$message.success('删除成功')
+      // 删除成功 重新获取用户列表
+      this.getUSerList()
     }
   }
 }

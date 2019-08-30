@@ -79,7 +79,8 @@ export default {
   },
   created() {
     this.getMenuList()
-    this.activePath = window.sessionStorage.getItem('activePath')
+    this.activePath = window.location.hash.slice(1)
+    // this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
@@ -102,7 +103,7 @@ export default {
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
     },
-    // 保存链接的激活状态
+    // 保存链接的激活状态 保存当前导航的哈希值
     saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath

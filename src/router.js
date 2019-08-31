@@ -14,6 +14,8 @@ import Rights from './components/power/Rights.vue'
 import Roles from './components/power/Roles.vue'
 // 引入 商品分类组件 Cate
 import Cate from './components/goods/Cate.vue'
+// 引入 分类参数组件 Params
+import Params from './components/goods/Params.vue'
 Vue.use(Router)
 // 解决连续点击路由导致报错的问题
 const originalPush = Router.prototype.push
@@ -34,7 +36,8 @@ let router = new Router({
         { path: '/users', component: Users },
         { path: '/rights', component: Rights },
         { path: '/roles', component: Roles },
-        { path: '/categories', component: Cate }
+        { path: '/categories', component: Cate },
+        { path: '/params', component: Params }
       ]
     }
   ]

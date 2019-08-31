@@ -38,7 +38,12 @@
         </template>
         <!-- 操作模板 opt -->
         <template slot="opt" slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="mini"
+            @click="editUser(scope.row.cat_id)"
+          >编辑</el-button>
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -89,12 +94,30 @@
         <el-button type="primary" @click="addCate">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改对话框 -->
+    <el-dialog title="修改分类" :visible.sync="editDialogVisible" width="50%">
+      <!-- 表单的内容修改 -->
+      <el-form
+        :model="editForm"
+        :rules="editFormRules"
+        ref="editFormRef"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="分类名：" prop="cat_name">
+          <el-input v-model="editForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editUserList">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { type } from 'os'
-import { async } from 'q'
+import { async } from 'q';
 export default {
   data() {
     return {
@@ -168,7 +191,18 @@ export default {
         checkStrictly: true
       },
       // 选中的父级分类的 id 值的数组
-      selectedKeys: []
+      selectedKeys: [],
+      // 控制修改对话框的显示与隐藏
+      editDialogVisible: false,
+      // 修改对话框的表单数据对象
+      editForm: {
+      },
+      // 修改对话框的表单验证对象
+      editFormRules: {
+        cat_name: [
+          { required: true, message: '请输入添加分类的名称', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -265,11 +299,15 @@ export default {
     },
     // 根据 id 删除商品分类
     async removeCate(id) {
-      let result = await this.$confirm('此操作将永久删除该商品分类, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).catch(err => err)
+      let result = await this.$confirm(
+        '此操作将永久删除该商品分类, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(err => err)
       // console.log(res);
       if (result !== 'confirm') {
         return this.$message.info('已取消该操作')
@@ -281,6 +319,29 @@ export default {
       }
       this.$message.success('删除商品分类成功')
       this.getCateList()
+    },
+    // 根据 id 值查询当前的参数信息
+    async editUser(cat_id) {
+      let { data: res } = await this.$http.get('categories/' + cat_id)
+      if (res.meta.status !== 200) {
+        this.$message.error('获取数据失败')
+      }
+      this.editForm = res.data
+      this.editDialogVisible = true
+    },
+    // 点击确定按钮 并对表单进行预验证 并且完成修改操作
+    async editUserList() {
+      this.$refs.editFormRef.validate( async val => {
+       if (!val) return
+        let { data: res } = await this.$http.put('categories/' + this.editForm.cat_id, { cat_name: this.editForm.cat_name })
+        // console.log(res);
+        if (res.meta.status !== 200) {
+          this.$message.error('修改失败')
+        }
+        this.$message.success('修改成功')
+        this.getCateList()
+        this.editDialogVisible = false
+      })
     }
   }
 }

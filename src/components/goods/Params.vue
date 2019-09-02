@@ -39,7 +39,28 @@
           <!-- 动态参数表格 -->
           <el-table :data="manyTableData" border stripe>
             <!-- 展开列 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template slot-scope="scope">
+                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <!-- 输入的文本框 -->
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
+                ></el-input>
+                <!-- 添加按钮 -->
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput(scope.row)"
+                >+ New Tag</el-button>
+              </template>
+            </el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
             <el-table-column label="参数名称" prop="attr_name"></el-table-column>
@@ -70,7 +91,24 @@
           <!-- 静态参数表格 -->
           <el-table :data="onlyTableData" border stripe>
             <!-- 展开列 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template slot-scope="scope">
+                <!-- 循环渲染 tag 标签 -->
+                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <!-- 输入的文本框 -->
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
+                ></el-input>
+                <!-- 添加按钮 -->
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+              </template>
+            </el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
             <el-table-column label="属性名称" prop="attr_name"></el-table-column>
@@ -132,6 +170,7 @@
 </template>
 
 <script>
+import { nextTick } from 'q'
 export default {
   data() {
     return {
@@ -193,7 +232,9 @@ export default {
       // console.log(this.selectedKeys);
       // 如果选中的不是三级 那么就将 selectedKeys 清空
       if (this.selectedKeys.length !== 3) {
-        return (this.selectedKeys = [])
+        this.selectedKeys = []
+        this.manyTableData = []
+        this.onlyTableData = []
       }
       // console.log(this.selectedKeys);
       let { data: res } = await this.$http.get(
@@ -203,7 +244,18 @@ export default {
       if (res.meta.status !== 200) {
         this.$message.error('获取参数列表失败')
       }
-      console.log(res.data)
+      // console.log(res.data)
+      // 把请求回来字符串的数据 转换成数组
+      res.data.forEach(item => {
+        // console.log(item)
+        item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
+        // 利用遍的方式 为数组中的对象添加两个属性
+        // 控制输入框的显示与隐藏
+        item.inputVisible = false
+        // 文本框中输入的内容
+        item.inputValue = ''
+      })
+      // console.log(res.data)
       if (this.activeName === 'many') {
         this.manyTableData = res.data
         // console.log(this.manyTableData)
@@ -277,21 +329,64 @@ export default {
     },
     // 根据 id 删除参数
     async removeUser(attr_id) {
-      let result =await this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).catch(err => err)
+      let result = await this.$confirm(
+        '此操作将永久删除该参数, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(err => err)
       if (result !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      let { data: res } = await this.$http.delete('categories/' + this.cateId + '/attributes/' + attr_id)
+      let { data: res } = await this.$http.delete(
+        'categories/' + this.cateId + '/attributes/' + attr_id
+      )
       // console.log(res);
       if (res.meta.status !== 200) {
         this.$message.error('删除失败')
       }
       this.$message.success('删除成功')
       this.handleTabClick()
+    },
+    // 当按下 Enter(回车键) 或者失去焦点的时候 触发该函数
+    async handleInputConfirm(row) {
+      if (row.inputValue.trim().length === 0) {
+        row.inputValue = ''
+        row.inputVisible = false
+        return
+      }
+      // 如果没有 return 说明用户有输入内容 那么就要在页面中添加用户输入的内容 并且向服务器发送请求 完成数据的添加
+      row.attr_vals.push(row.inputValue.trim())
+      row.inputValue = ''
+      row.inputVisible = false
+      this.saveAttrVals(row)
+    },
+    // 将对 attr_vals 的操作单独拿出来 保存到数据库
+    async saveAttrVals(row) {
+      let { data: res } = await this.$http.put('categories/' + this.cateId + '/attributes/' + row.attr_id, { attr_name: row.attr_name, attr_sel: row.attr_sel, attr_vals: row.attr_vals.join(' ') })
+      // console.log(res);
+      if (res.meta.status !== 200) {
+        this.$message.error('添加参数失败')
+      }
+      this.$message.success('添加参数成功')
+    },
+    // 点击按钮 展示输入的文本框
+    showInput(row) {
+      row.inputVisible = true
+      // 在更新完数据 并且渲染完 DOM 后 执行 nextTick 中的回调函数
+      // 这个下划线的作用就是箭头函数的中的 () 占位符没有意义
+      this.$nextTick(_ => {
+        // 让输入框自动获取焦点
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    // 删除对应的 tag 
+    handleClose(index, row) {
+      row.attr_vals.splice(index, 1)
+      this.saveAttrVals(row)
     }
   },
   // 计算属性
@@ -322,5 +417,11 @@ export default {
 <style lang="less" scoped>
 .el-row {
   margin: 25px 0 25px 0;
+}
+.el-tag {
+  margin: 10px;
+}
+.input-new-tag {
+  width: 130px;
 }
 </style>

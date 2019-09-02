@@ -369,9 +369,9 @@ export default {
       let { data: res } = await this.$http.put('categories/' + this.cateId + '/attributes/' + row.attr_id, { attr_name: row.attr_name, attr_sel: row.attr_sel, attr_vals: row.attr_vals.join(' ') })
       // console.log(res);
       if (res.meta.status !== 200) {
-        this.$message.error('添加参数失败')
+        this.$message.error('修改参数失败')
       }
-      this.$message.success('添加参数成功')
+      this.$message.success('修改参数成功')
     },
     // 点击按钮 展示输入的文本框
     showInput(row) {

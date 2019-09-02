@@ -41,7 +41,12 @@
             <!-- 展开列 -->
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <el-tag
+                  @close="handleClose(index, scope.row)"
+                  closable
+                  :key="index"
+                  v-for="(item, index) in scope.row.attr_vals"
+                >{{item}}</el-tag>
                 <!-- 输入的文本框 -->
                 <el-input
                   class="input-new-tag"
@@ -94,7 +99,12 @@
             <el-table-column type="expand">
               <template slot-scope="scope">
                 <!-- 循环渲染 tag 标签 -->
-                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <el-tag
+                  @close="handleClose(index, scope.row)"
+                  closable
+                  :key="index"
+                  v-for="(item, index) in scope.row.attr_vals"
+                >{{item}}</el-tag>
                 <!-- 输入的文本框 -->
                 <el-input
                   class="input-new-tag"
@@ -366,7 +376,14 @@ export default {
     },
     // 将对 attr_vals 的操作单独拿出来 保存到数据库
     async saveAttrVals(row) {
-      let { data: res } = await this.$http.put('categories/' + this.cateId + '/attributes/' + row.attr_id, { attr_name: row.attr_name, attr_sel: row.attr_sel, attr_vals: row.attr_vals.join(' ') })
+      let { data: res } = await this.$http.put(
+        'categories/' + this.cateId + '/attributes/' + row.attr_id,
+        {
+          attr_name: row.attr_name,
+          attr_sel: row.attr_sel,
+          attr_vals: row.attr_vals.join(' ')
+        }
+      )
       // console.log(res);
       if (res.meta.status !== 200) {
         this.$message.error('修改参数失败')
@@ -383,7 +400,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    // 删除对应的 tag 
+    // 删除对应的 tag
     handleClose(index, row) {
       row.attr_vals.splice(index, 1)
       this.saveAttrVals(row)

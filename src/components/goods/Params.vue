@@ -383,7 +383,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    // 删除对应的 tag 
+    // 删除对应的tag 
     handleClose(index, row) {
       row.attr_vals.splice(index, 1)
       this.saveAttrVals(row)

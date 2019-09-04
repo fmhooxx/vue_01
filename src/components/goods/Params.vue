@@ -41,7 +41,12 @@
             <!-- 展开列 -->
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <el-tag
+                  @close="handleClose(index, scope.row)"
+                  closable
+                  :key="index"
+                  v-for="(item, index) in scope.row.attr_vals"
+                >{{item}}</el-tag>
                 <!-- 输入的文本框 -->
                 <el-input
                   class="input-new-tag"
@@ -94,7 +99,12 @@
             <el-table-column type="expand">
               <template slot-scope="scope">
                 <!-- 循环渲染 tag 标签 -->
-                <el-tag @close="handleClose(index, scope.row)" closable :key="index" v-for="(item, index) in scope.row.attr_vals">{{item}}</el-tag>
+                <el-tag
+                  @close="handleClose(index, scope.row)"
+                  closable
+                  :key="index"
+                  v-for="(item, index) in scope.row.attr_vals"
+                >{{item}}</el-tag>
                 <!-- 输入的文本框 -->
                 <el-input
                   class="input-new-tag"
@@ -242,7 +252,7 @@ export default {
         { params: { sel: this.activeName } }
       )
       if (res.meta.status !== 200) {
-        this.$message.error('获取参数列表失败')
+        return this.$message.error('获取参数列表失败')
       }
       // console.log(res.data)
       // 把请求回来字符串的数据 转换成数组
@@ -366,12 +376,19 @@ export default {
     },
     // 将对 attr_vals 的操作单独拿出来 保存到数据库
     async saveAttrVals(row) {
-      let { data: res } = await this.$http.put('categories/' + this.cateId + '/attributes/' + row.attr_id, { attr_name: row.attr_name, attr_sel: row.attr_sel, attr_vals: row.attr_vals.join(' ') })
+      let { data: res } = await this.$http.put(
+        'categories/' + this.cateId + '/attributes/' + row.attr_id,
+        {
+          attr_name: row.attr_name,
+          attr_sel: row.attr_sel,
+          attr_vals: row.attr_vals.join(' ')
+        }
+      )
       // console.log(res);
       if (res.meta.status !== 200) {
-        this.$message.error('添加参数失败')
+        this.$message.error('修改参数失败')
       }
-      this.$message.success('添加参数成功')
+      this.$message.success('修改参数成功')
     },
     // 点击按钮 展示输入的文本框
     showInput(row) {

@@ -16,6 +16,10 @@ import Roles from './components/power/Roles.vue'
 import Cate from './components/goods/Cate.vue'
 // 引入 分类参数组件 Params
 import Params from './components/goods/Params.vue'
+// 引入 商品列表组件 Goods
+import Goods from './components/goods/Goods.vue'
+// 引入 添加商品的组件 Add
+import Add from './components/goods/Add.vue'
 Vue.use(Router)
 // 解决连续点击路由导致报错的问题
 const originalPush = Router.prototype.push
@@ -37,7 +41,9 @@ let router = new Router({
         { path: '/rights', component: Rights },
         { path: '/roles', component: Roles },
         { path: '/categories', component: Cate },
-        { path: '/params', component: Params }
+        { path: '/params', component: Params },
+        { path: '/goods', component: Goods },
+        { path: '/goods/add', component: Add }
       ]
     }
   ]

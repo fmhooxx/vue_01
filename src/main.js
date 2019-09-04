@@ -8,6 +8,12 @@ import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 // 引入第三方的包 用来展示树形结构
 import TreeTable from 'vue-table-with-tree-grid'
+// 导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 // 导入 axios 并配置全局
 import axios from 'axios'
 // 配置 axios 请求地址
@@ -25,7 +31,21 @@ Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
+// 挂载一个全局的时间过滤器
+Vue.filter('date', function (val) {
+  let dt = new Date(val)
+  let y = dt.getFullYear()
+  let m = (dt.getMonth() + 1 + '').padStart(2, '0')
+  let d = (dt.getDate() + '').padStart(2, '0')
+  let hh = (dt.getHours() + '').padStart(2, '0')
+  let mm = (dt.getMinutes() + '').padStart(2, '0')
+  let ss = (dt.getSeconds() + '').padStart(2, '0')
+  return `${y}年${m}月${d}日 ${hh}:${mm}:${ss}`
+})
+
 Vue.component('tree-table', TreeTable)
+// 将富文本编辑器 注册为全局组件
+Vue.use(VueQuillEditor)
 
 new Vue({
   router,

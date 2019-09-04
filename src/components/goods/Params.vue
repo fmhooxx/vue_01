@@ -252,7 +252,7 @@ export default {
         { params: { sel: this.activeName } }
       )
       if (res.meta.status !== 200) {
-        this.$message.error('获取参数列表失败')
+        return this.$message.error('获取参数列表失败')
       }
       // console.log(res.data)
       // 把请求回来字符串的数据 转换成数组

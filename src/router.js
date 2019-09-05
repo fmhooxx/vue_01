@@ -20,6 +20,8 @@ import Params from './components/goods/Params.vue'
 import Goods from './components/goods/Goods.vue'
 // 引入 添加商品的组件 Add
 import Add from './components/goods/Add.vue'
+// 引入订单管理组件 Order
+import Order from './components/order/Order.vue'
 Vue.use(Router)
 // 解决连续点击路由导致报错的问题
 const originalPush = Router.prototype.push
@@ -43,7 +45,8 @@ let router = new Router({
         { path: '/categories', component: Cate },
         { path: '/params', component: Params },
         { path: '/goods', component: Goods },
-        { path: '/goods/add', component: Add }
+        { path: '/goods/add', component: Add },
+        { path: '/orders', component: Order }
       ]
     }
   ]

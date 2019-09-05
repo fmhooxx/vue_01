@@ -22,6 +22,8 @@ import Goods from './components/goods/Goods.vue'
 import Add from './components/goods/Add.vue'
 // 引入订单管理组件 Order
 import Order from './components/order/Order.vue'
+// 引入数据报表组件 Report
+import Report from './components/report/Report.vue'
 Vue.use(Router)
 // 解决连续点击路由导致报错的问题
 const originalPush = Router.prototype.push
@@ -46,7 +48,8 @@ let router = new Router({
         { path: '/params', component: Params },
         { path: '/goods', component: Goods },
         { path: '/goods/add', component: Add },
-        { path: '/orders', component: Order }
+        { path: '/orders', component: Order },
+        { path: '/reports', component: Report }
       ]
     }
   ]

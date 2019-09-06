@@ -117,7 +117,6 @@
 </template>
 
 <script>
-import { async } from 'q';
 export default {
   data() {
     return {
@@ -256,12 +255,9 @@ export default {
       // 如果 selectedKeys 数组的长度 length 大于 0 说明有选中父类分类 反之 说明没有选中任何父类
       if (this.selectedKeys.length > 0) {
         // 父类的 id 它的值是数组的最后一位
-        this.addCateForm.cat_pid = this.selectedKeys[
-          this.selectedKeys.length - 1
-        ]
+        this.addCateForm.cat_pid = this.selectedKeys[2]
         // 为当前的等级赋值 0 是一级 1 是二级 2 是三级 如果选中了父类 那么它里面会有有父类的 id 值 如果有一个父类的 id 值 那么当前的等级就应该是二级 如果里面有两位父类的 id 值 那么它就是三级
         this.addCateForm.cat_level = this.selectedKeys.length
-        return
       } else {
         // 父类的 id
         this.addCateForm.cat_pid = 0
@@ -313,7 +309,7 @@ export default {
         return this.$message.info('已取消该操作')
       }
       let { data: res } = await this.$http.delete('categories/' + id)
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) {
         return this.$message.error('删除商品分类失败')
       }
@@ -331,16 +327,16 @@ export default {
     },
     // 点击确定按钮 并对表单进行预验证 并且完成修改操作
     async editUserList() {
-      this.$refs.editFormRef.validate( async val => {
-       if (!val) return
-        let { data: res } = await this.$http.put('categories/' + this.editForm.cat_id, { cat_name: this.editForm.cat_name })
-        // console.log(res);
-        if (res.meta.status !== 200) {
-          this.$message.error('修改失败')
-        }
-        this.$message.success('修改成功')
-        this.getCateList()
-        this.editDialogVisible = false
+      this.$refs.editFormRef.validate(async val => {
+      if (!val) return
+      let { data: res } = await this.$http.put('categories/' + this.editForm.cat_id, { cat_name: this.editForm.cat_name })
+      // console.log(res);
+      if (res.meta.status !== 200) {
+        this.$message.error('修改失败')
+      }
+      this.$message.success('修改成功')
+      this.getCateList()
+      this.editDialogVisible = false
       })
     }
   }

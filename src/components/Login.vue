@@ -75,22 +75,6 @@ export default {
       this.$refs.loginformRef.validate(async val => {
         // console.log(val)
         // 如果返回的布尔值是 false
-        // 两种写法相同 下面一种更加简洁
-        // if (!val) {
-        //   return;
-        // } else {
-        //   let { data: res } = await this.$http.post("login", this.loginFrom);
-        //   if (res.meta.status == 200) {
-        //     this.$message.success("登录成功");
-        //     window.sessionStorage.setItem("token", res.data.token);
-        //     setTimeout(() => {
-        //       this.$router.push("/home");
-        //     }, 1500);
-        //   } else {
-        //     this.$message.error("登录失败");
-        //     return;
-        //   }
-        // }
         if (!val) return
         let { data: res } = await this.$http.post('login', this.loginFrom)
         if (res.meta.status !== 200) return this.$message.error('登录失败')

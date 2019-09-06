@@ -180,7 +180,6 @@
 </template>
 
 <script>
-import { nextTick } from 'q'
 export default {
   data() {
     return {
@@ -400,7 +399,7 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    // 删除对应的tag 
+    // 删除对应的 tag 标签
     handleClose(index, row) {
       row.attr_vals.splice(index, 1)
       this.saveAttrVals(row)

@@ -114,7 +114,7 @@ export default {
         goods_price: '',
         goods_number: '',
         goods_weight: '',
-        goods_introduce: '',
+        goods_introduce: ''
       },
       // 修改商品的数据验证对象
       editFormRules: {
@@ -129,7 +129,7 @@ export default {
         ],
         goods_weight: [
           { required: true, message: '请输入商品名称', trigger: 'blur' }
-        ],
+        ]
       }
     }
   },
@@ -176,7 +176,7 @@ export default {
         return this.$message.error('已取消删除操作')
       }
       let { data: res } = await this.$http.delete('goods/' + goods_id)
-      console.log(res)
+      // console.log(res)
 
       if (res.meta.status !== 200) {
         return this.$message.error('删除失败')
@@ -199,7 +199,7 @@ export default {
         if (!val) return
         let { data: res } = await this.$http.put('goods/' + this.editForm.goods_id, this.editForm)
         if (res.meta.status !== 200) {
-          return thisn.$message.error('修改失败')
+          return this.$message.error('修改失败')
         }
         this.$message.success('修改成功')
         this.getGoodList()

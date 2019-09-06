@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 export default {
   data() {
     return {
@@ -259,7 +259,7 @@ export default {
       this.addForm.pics.splice(index, 1)
       // 轮播图
       this.imgPath.splice(index, 1)
-      console.log(this.addForm)
+      // console.log(this.addForm)
     },
     // 当文件上传成功之后 调用的钩子函数
     handleSuccess(response) {
@@ -267,7 +267,7 @@ export default {
       // 拼接得到一个图片信息对象
       let path = response.data.url
       this.imgPath.push(path)
-      console.log(this.imgPath)
+      // console.log(this.imgPath)
 
       let picInfo = { pics: response.data.tmp_path }
       // 将图片信息对象 push 到上传图片的数组中
@@ -296,14 +296,11 @@ export default {
           }
           this.addForm.attrs.push(newmonlyTableData)
         })
-        
         let { data: res } = await this.$http.post('goods', {
           goods_name: this.addForm.goods_name,
           goods_cat: this.addForm.goods_cat.join(','),
-          goods_name: this.addForm.goods_name,
           goods_price: this.addForm.goods_price,
           goods_number: this.addForm.goods_number,
-          goods_weight: this.addForm.goods_weight,
           goods_weight: this.addForm.goods_weight,
           goods_introduce: this.addForm.goods_introduce,
           pics: this.addForm.pics

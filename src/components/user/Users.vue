@@ -110,7 +110,7 @@
       </span>
     </el-dialog>
     <!-- 修改用户的对话框 -->
-    <el-dialog title="修改用户" :visible.sync="editDialogVisble" width="50%" @close="editDialogClosed">
+    <el-dialog title="修改用户" :visible.sync="editDialogVisble" width="50%" @close="editFormDialogClosed">
       <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
         <el-form-item label="用户名">
           <el-input v-model="editForm.username" disabled></el-input>
@@ -253,8 +253,9 @@ export default {
         params: this.userQuery
       })
       // console.log(res)
-      if (res.meta.status !== 200)
+      if (res.meta.status !== 200) {
         return this.$message.error('获取用户列表失败')
+      }
       this.userListL = res.data.users
       this.total = res.data.total
     },
@@ -399,7 +400,7 @@ export default {
       this.setRoleDialogVisible = false
     },
     // 当分配角色对话框被关闭的时候 实现表单内容的重置
-    editDialogClosed() {
+    editFormDialogClosed() {
       this.selectedRoleId = ''
       this.userInfoList = {}
     }

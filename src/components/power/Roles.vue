@@ -373,7 +373,7 @@ export default {
       ]
       let keyStr = keys.join(',')
       // console.log(keyStr);
-      let { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, {rids: keyStr})
+      let { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, { rids: keyStr })
       // console.log(res);
       if (res.meta.status !== 200) {
         return this.$message.error('分配权限失败')
